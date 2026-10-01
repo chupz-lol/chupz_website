@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>chupz.lol</title>
+
+    <meta name="description"
+        content="Building a massive 4X/RTS MMO empire on Solana. Powered by Pump.fun. Follow for updates and don't miss the moonshot!">
+
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000617;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="visually-hidden">
+        <h1>chupz.lol</h1>
+
+        <h2>Official Links</h2>
+        <ul>
+            <li><a href="https://x.com/chupz_lol">X (Twitter)</a></li>
+            <li><a href="https://t.me/chupz_lol">Telegram</a></li>
+            <li><a href="https://pump.fun/profile/chupz_lol">Pump.fun</a></li>
+            <li><a href="https://github.com/chupz-lol">GitHub</a></li>
+            <li><a href="https://rive.app/@chupz.lol">Rive.app</a></li>
+        </ul>
+
+        <h2>Games in Development</h2>
+        <article>
+            <h3 id="game1-title">Project: Neon Space</h3>
+            <p id="game1-desc">MMO 4X/RTS on Solana blockchain. Form clans, conquer planets, and dominate entire solar
+                systems.<br><br>Follow for updates and prepare for launch!</p>
+        </article>
+    </div>
+
+    <canvas id="rive-canvas"></canvas>
+
+    <script src="https://unpkg.com/@rive-app/webgl2@latest"></script>
+
+    <script>
+        rive.Rive.suppressDeprecationWarnings = ["state-machines-param", "rive-events"];
+
+        const riveInstance = new rive.Rive({
+            src: 'chupz_website.riv',
+            canvas: document.getElementById('rive-canvas'),
+            autoplay: true,
+            stateMachine: 'SiteState',
+            autoBind: true,
+            layout: new rive.Layout({
+                fit: rive.Fit.Layout,
+                layoutScaleFactor: 0.7,
+                alignment: rive.Alignment.center
+            }),
+
+            onLoad: () => {
+                riveInstance.resizeDrawingSurfaceToCanvas();
+
+                const vmi = riveInstance.viewModelInstance;
+                if (vmi) {
+                    const titleText = document.getElementById('game1-title').innerText;
+                    const descText = document.getElementById('game1-desc').innerText;
+                    vmi.string("game1Data/gameTitle").value = titleText;
+                    vmi.string("game1Data/gameDesc").value = descText;
+                    vmi.number("game1Data/gameStatus").value = 0;
+                }
+
+                riveInstance.on(rive.EventType.RiveEvent, (event) => {
+                    const eventData = event.data || event;
+                    const eventName = eventData.name;
+
+                    const routes = {
+                        'pressXEvent': 'https://x.com/chupz_lol',
+                        'pressTGEvent': 'https://t.me/chupz_lol',
+                        'pressPUMPEvent': 'https://pump.fun/profile/chupz_lol',
+                        'pressGITEvent': 'https://github.com/chupz-lol',
+                        'pressRIVEEvent': 'https://rive.app/@chupz.lol'
+                    };
+
+                    if (routes[eventName]) {
+                        setTimeout(() => {
+                            window.open(routes[eventName], '_blank');
+                        }, 400);
+                    }
+                });
+            }
+        });
+
+        function computeSize() {
+            if (riveInstance) {
+                riveInstance.resizeDrawingSurfaceToCanvas();
+            }
+        }
+
+        window.addEventListener('resize', computeSize);
+
+        window.matchMedia(`(resolution: ${window.devicePixelRatio}dppx)`)
+            .addEventListener("change", computeSize);
+    </script>
+</body>
+
+</html>
